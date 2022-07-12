@@ -1,37 +1,23 @@
-#include "steering.h"
+#include "Steering.h"
 
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
-int CurrentPosition = 500;
-int CurrentFreq = 500;
-bool PositionNotTooHigh(double position)
+
+Steering::Steering()
 {
-  if(position<=100)
-    return true;
+  pwm = Adafruit_PWMServoDriver();
+  int CurrentPosition = 500;
+  int CurrentFreq = 500;
+  pwm.setOscillatorFrequency(27000000);
+  pwm.setPWMFreq(SERVO_FREQ);
 
-  Serial.print("Position is too high: ");
-  Serial.println(position);
-  return false;
 }
 
-void SetPosition(uint8_t n, double position)
+void Steering::Steer(double position)
 {
-  if (PositionNotTooHigh(position))
-  {
-    int targetFreq = (((SERVOMAX-SERVOMIN)/100)*position)+SERVOMIN;
-    if(CurrentPosition<targetFreq)
-    {
-      for(uint16_t freq = CurrentFreq; freq < targetFreq; freq++)
-      {
-        pwm.setPWM(n,0,freq);
-      }
-      CurrentFreq=targetFreq;
-    }else
-    {
-      for(uint16_t freq = CurrentFreq; freq > targetFreq; freq--)
-      {
-        pwm.setPWM(n,0,freq);
-      }
-      CurrentFreq=targetFreq;
-    }
-  }
+  int targetFreq = (((SERVOMAX-SERVOMIN)/100)*position)+SERVOMIN;
+  pwm.setPWM(0, 0, targetFreq);
+  pwm.setPWM(1, 0, targetFreq);
+  pwm.setPWM(2, 0, targetFreq);
+  pwm.setPWM(3, 0, targetFreq);
 }
+
+

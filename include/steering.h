@@ -9,5 +9,15 @@
 #define USMAX  2400 // This is the rounded 'maximum' microsecond length based on the maximum pulse of 600
 #define SERVO_FREQ 50 // Analog servos run at ~50 Hz updates
 
+class Steering
+{
+    
+    public: 
+        //Constructor
+        Steering();
 
-
+        //Methods
+        void Steer(double position);
+    private:
+        Adafruit_PWMServoDriver pwm;
+};
